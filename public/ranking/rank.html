@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ResultSync: View top VTU class and university rankings instantly! Check your position among classmates and university toppers easily.">
+  <meta name="keywords" content="VTU, VTU result, class rank, university rank, VTU rankings, ResultSync, VTUSync">
+  <meta name="author" content="Rahul">
+  <meta property="og:title" content="ResultSync - VTU Class & University Rankings">
+  <meta property="og:description" content="View top VTU class and university rankings instantly! Check your position among classmates and university toppers easily with ResultSync.">
+  <meta property="og:image" content="/images/ranking.png">
+  <meta property="og:url" content="https://resync.vtusync.in/ranking">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ResultSync">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ResultSync - VTU Class & University Rankings">
+  <meta name="twitter:description" content="View top VTU class and university rankings instantly! Check your position among classmates and university toppers easily with ResultSync.">
+  <meta name="twitter:image" content="/images/ranking.png">  
+    <title>Rankings | ResultSync</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/4926/4926610.png" type="image/png">
+    <link rel="stylesheet" href="rank.css">
+</head>
+<body>
+  <header class="glass-header">
+    <div class="header-content">
+      <div class="logo-group">
+        <div class="logo-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h1>ResultSync</h1>
+        <div class="tagline-badge">BETA</div>
+      </div>
+      
+      <nav class="desktop-nav">
+        <a href="/" class="nav-link active">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="https://results.vtu.ac.in" class="nav-link">
+          <i class="fas fa-poll"></i>
+          <span>Official Results</span>
+        </a>
+        <a href="/ranking/" class="nav-link">
+          <i class="fas fa-trophy"></i>
+          <span>Rankings</span>
+        </a>
+        <a href="/compare/" class="nav-link compare-link">
+          <i class="fas fa-users"></i>
+          <span>Compare</span>
+        </a>
+        <!-- New Feedback Link -->
+        <a href="/legal/feedback.html" class="nav-link">
+          <i class="fas fa-comment-alt"></i>
+          <span>Feedback</span>
+        </a>
+        <!-- New Legal Link -->
+        <a href="/legal/" class="nav-link">
+          <i class="fas fa-balance-scale"></i>
+          <span>Legal</span>
+        </a>
+      </nav>
+      
+      <button class="mobile-menu-btn" aria-label="Menu">
+        <div class="hamburger"></div>
+      </button>
+    </div>
+  
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+      <div class="mobile-nav-header">
+        <div class="logo-group">
+          <div class="logo-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h1>ResultSync</h1>
+        </div>
+
+      </div>
+      <div class="mobile-nav-links">
+        <a href="/" class="mobile-nav-link active">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="https://results.vtu.ac.in" class="mobile-nav-link">
+          <i class="fas fa-poll"></i>
+          <span>Official Results</span>
+        </a>
+        <a href="/ranking/" class="mobile-nav-link">
+          <i class="fas fa-trophy"></i>
+          <span>Rankings</span>
+        </a>
+        <a href="/compare/" class="mobile-nav-link icompare-link">
+          <i class="fas fa-users"></i>
+          <span>Compare</span>
+        </a>
+        <!-- Mobile Feedback Link -->
+        <a href="/legal/feedback/" class="mobile-nav-link">
+          <i class="fas fa-comment-alt"></i>
+          <span>Feedback</span>
+        </a>
+        <!-- Mobile Legal Link -->
+        <a href="/legal/" class="mobile-nav-link">
+          <i class="fas fa-balance-scale"></i>
+          <span>Legal</span>
+        </a>
+      </div>
+      
+      <!-- Mobile Footer Links -->
+      <div class="mobile-nav-footer">
+        <a href="#" class="mobile-footer-link">
+          <i class="fas fa-shield-alt"></i>
+          <span>Version 1.0.0</span>
+        </a>
+
+      </div>
+    </div>
+  </header>
+      
+      
+
+<div class="container">
+    <div class="content">
+        <h1>Rankings</h1>
+        <p class="description">View Top Class or University Performers!</p>
+
+        <div class="info-note">
+            <p>📌 Only results which are saved will be available for class rank and university rank or to view later.</p>
+            <p>Haven't checked your results yet? <a href="#" id="checkResultLink">Click here to check!</a></p>
+        </div>
+
+
+        <form id="rankForm">
+          <input type="text" id="usnInput" placeholder="Enter Your USN" required />
+          <button type="submit">Get Rank</button>
+      </form>
+      
+        <div class="rank-toggle">
+            <button id="classBtn" class="active">Class Rank</button>
+            <button id="univBtn">University Rank</button>
+        </div>
+
+
+
+        <div id="loader" style="display:none;">Loading rankings...</div>
+
+        <table id="rankTable" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>USN</th>
+                    <th>Total Marks</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <div id="tableControls" style="display:none; margin-bottom:1rem;">
+            </div>
+            
+            <button id="shareBtn" style="display:none; padding:10px 16px; background: var(--primary); color: white; border-radius:8px; border:none; margin-bottom:1rem; cursor:pointer;">
+                📤 Share My Rank
+            </button>
+            <div id="myRankSummary" style="display:none; margin-top:1rem; padding:1rem; border-radius:8px; background:#f4f4f4;">
+              <h3>📊 Your Performance Summary</h3>
+              <p id="classRankText"></p>
+              <p id="univRankText"></p>
+              <p id="motivationalText" style="font-weight:bold;"></p>
+            </div>
+            
+        </table>
+    </div>
+</div>
+<div class="footer-card">
+  <p>Not affiliated with VTU. For educational purposes only.</p>
+  <p>Proudly built with <i class="fas fa-heart"></i> by <strong>Rahul</strong></p>
+  <p>Powered by <a href="https://vtusync.in" target="_blank" rel="noopener noreferrer">VTUSync.in</a></p>
+  <p>Version 1.0.0</p>
+</div>
+
+<script src="rank.js"></script>
+
+</body>
+</html>

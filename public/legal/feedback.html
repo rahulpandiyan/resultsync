@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ResultSync Feedback</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-light: #818cf8;
+      --secondary: #a855f7;
+      --accent: #ec4899;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --text-muted: #94a3b8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--box-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      transform: rotate(30deg);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .feedback-card {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .feedback-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-header {
+      padding: 1.5rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .card-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text);
+    }
+
+    .form-group .required::after {
+      content: '*';
+      color: var(--accent);
+      margin-left: 4px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--border-radius);
+      font-size: 0.9375rem;
+      transition: var(--transition);
+      background-color: #f8fafc;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      background-color: white;
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236466f1' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 12px;
+    }
+
+    textarea.form-control {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .file-input {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .file-input input[type="file"] {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background-color: #f1f5f9;
+      border-radius: var(--border-radius);
+      border: 1px dashed #cbd5e1;
+      width: 100%;
+      transition: var(--transition);
+    }
+
+    .file-input:hover .file-input-label {
+      border-color: var(--primary-light);
+      background-color: #eef2ff;
+    }
+
+    .file-input-icon {
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+
+    .file-input-text {
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.875rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3), 0 2px 4px -1px rgba(99, 102, 241, 0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      background-color: white;
+      box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    footer a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback-card {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      main {
+        padding: 1rem;
+      }
+      
+      .feedback-card {
+        border-radius: 0;
+      }
+      
+      header h1 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>ResultSync Feedback</h1>
+</header>
+
+<main>
+  <div class="feedback-card">
+    <div class="card-header">
+      <h2>We'd love your feedback!</h2>
+    </div>
+    
+    <div class="card-body">
+      <form action="https://formspree.io/f/manoebvp" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label>Your Email (optional)</label>
+          <input type="email" name="email" class="form-control" placeholder="you@example.com">
+        </div>
+
+        <div class="form-group">
+          <label class="required">How was your experience?</label>
+          <select name="experience" class="form-control" required>
+            <option value="" disabled selected>Select your experience</option>
+            <option>Excellent</option>
+            <option>Good</option>
+            <option>Average</option>
+            <option>Poor</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Where can we improve?</label>
+          <textarea name="improvement" class="form-control" placeholder="Tell us how we can improve"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>What features would you like to see?</label>
+          <textarea name="features" class="form-control" placeholder="Feature suggestions"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Did you encounter any bugs? If yes, please describe:</label>
+          <textarea name="bugs" class="form-control" placeholder="Describe the issue you faced, if any"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>If possible, please upload a screenshot of the bug:</label>
+          <div class="file-input">
+            <input type="file" name="screenshot" accept="image/*">
+            <label class="file-input-label">
+              <i class="fas fa-cloud-upload-alt file-input-icon"></i>
+              <span class="file-input-text">Choose file or drag & drop here</span>
+            </label>
+          </div>
+        </div>
+
+        <input type="hidden" name="_subject" value="New Feedback from ResultSync">
+        <input type="hidden" name="_cc" value="rahul.legend345@gmail.com">
+
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-paper-plane"></i>
+          Submit Feedback
+        </button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer>
+  &copy; 2025 <a href="https://vtusync.in">VTUSync</a>. All rights reserved.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ResultSync: Compare your VTU results with friends instantly! See class ranks, total marks, and performance insights in one place — quick and hassle-free.">
+  <meta name="keywords" content="VTU, VTU result, SGPA, class rank, compare VTU results, university results, ResultSync, VTUSync">
+  <meta name="author" content="Rahul">
+  <meta property="og:title" content="ResultSync - Compare Your VTU Results with Friends">
+  <meta property="og:description" content="Compare your VTU results with friends instantly! See class ranks, total marks, and performance insights easily with ResultSync.">
+  <meta property="og:image" content="/images/compare.png">
+  <meta property="og:url" content="https://resync.vtusync.in/compare">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ResultSync">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ResultSync - Compare Your VTU Results with Friends">
+  <meta name="twitter:description" content="Compare your VTU results with friends instantly! See class ranks, total marks, and performance insights easily with ResultSync.">
+  <meta name="twitter:image" content="/images/compare.png">
+  
+  <title>Compare Results - VTUSync</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/4926/4926610.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="compare.css" />
+</head>
+<body>
+  <header class="glass-header">
+    <div class="header-content">
+      <div class="logo-group">
+        <div class="logo-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h1>ResultSync</h1>
+        <div class="tagline-badge">BETA</div>
+      </div>
+      
+      <nav class="desktop-nav">
+        <a href="/" class="nav-link active">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="https://results.vtu.ac.in" class="nav-link">
+          <i class="fas fa-poll"></i>
+          <span>Official Results</span>
+        </a>
+        <a href="/ranking/" class="nav-link">
+          <i class="fas fa-trophy"></i>
+          <span>Rankings</span>
+        </a>
+        <a href="/compare/" class="nav-link compare-link">
+          <i class="fas fa-users"></i>
+          <span>Compare</span>
+        </a>
+        <!-- New Feedback Link -->
+        <a href="/legal/feedback.html" class="nav-link">
+          <i class="fas fa-comment-alt"></i>
+          <span>Feedback</span>
+        </a>
+        <!-- New Legal Link -->
+        <a href="/legal/" class="nav-link">
+          <i class="fas fa-balance-scale"></i>
+          <span>Legal</span>
+        </a>
+      </nav>
+      
+      <button class="mobile-menu-btn" aria-label="Menu">
+        <div class="hamburger"></div>
+      </button>
+    </div>
+  
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+      <div class="mobile-nav-header">
+        <div class="logo-group">
+          <div class="logo-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h1>ResultSync</h1>
+        </div>
+
+      </div>
+      <div class="mobile-nav-links">
+        <a href="/" class="mobile-nav-link active">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="https://results.vtu.ac.in" class="mobile-nav-link">
+          <i class="fas fa-poll"></i>
+          <span>Official Results</span>
+        </a>
+        <a href="/ranking/" class="mobile-nav-link">
+          <i class="fas fa-trophy"></i>
+          <span>Rankings</span>
+        </a>
+        <a href="/compare/" class="mobile-nav-link icompare-link">
+          <i class="fas fa-users"></i>
+          <span>Compare</span>
+        </a>
+        <!-- Mobile Feedback Link -->
+        <a href="/legal/feedback/" class="mobile-nav-link">
+          <i class="fas fa-comment-alt"></i>
+          <span>Feedback</span>
+        </a>
+        <!-- Mobile Legal Link -->
+        <a href="/legal/" class="mobile-nav-link">
+          <i class="fas fa-balance-scale"></i>
+          <span>Legal</span>
+        </a>
+      </div>
+      
+      <!-- Mobile Footer Links -->
+      <div class="mobile-nav-footer">
+        <a href="#" class="mobile-footer-link">
+          <i class="fas fa-shield-alt"></i>
+          <span>Version 1.0.0</span>
+        </a>
+
+      </div>
+    </div>
+  </header>
+  
+<div class="container">
+  <h1>Compare Results with Friends</h1>
+
+  <form id="comparisonForm">
+    <div class="input-group">
+      <label for="usn">Your USN</label>
+      <input type="text" id="usn" placeholder="1RV20CS001" required />
+    </div>
+
+    <div id="friendsUsnsContainer"></div>
+
+    <button type="button" id="addFriendBtn">
+      <i class="fas fa-user-plus"></i> Add Friend
+    </button>
+
+    <div class="captcha-group">
+      <div class="input-group">
+        <label for="captcha">Captcha</label>
+        <div class="captcha-container">
+          <img id="captchaImg" src="/api/captcha" alt="Captcha Image" class="captcha-image" />
+          <button type="button" id="refreshCaptcha" class="captcha-refresh">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+        <input type="text" id="captcha" placeholder="Enter the captcha" required class="captcha-input" />
+      </div>
+    </div>
+
+    <button type="submit">
+      <i class="fas fa-chart-bar"></i> Compare Results
+    </button>
+  </form>
+
+  <div id="loader">
+    <div class="loader-spinner"></div>
+    <p>Fetching results...</p>
+  </div>
+
+  <table id="resultsTable">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Total Marks</th>
+        <th>Rank</th>
+        <th>Subjects</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div style="text-align: center;">
+    <a href="index.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Result Page
+    </a>
+  </div>
+</div>
+
+<div class="footer-card">
+  <p>Not affiliated with VTU. For educational purposes only.</p>
+  <p>Proudly built with <i class="fas fa-heart"></i> by <strong>Rahul</strong></p>
+  <p>Powered by <a href="https://vtusync.in" target="_blank" rel="noopener noreferrer">VTUSync.in</a></p>
+  <p>Version 1.0.0</p>
+</div>
+  
+
+<script src="compare.js"></script>
+</body>
+</html>

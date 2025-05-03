@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ResultSync: Fetch your VTU results instantly! Easily view your SGPA, percentage, class rank, and more without any hassle.">
+  <meta name="keywords" content="VTU, VTU result, SGPA, class rank, university results, VTU results fetcher, ResultSync">
+  <meta name="author" content="Rahul">
+  <meta property="og:title" content="ResultSync - Quick and Easy VTU Results">
+  <meta property="og:description" content="ResultSync: Fetch your VTU results instantly! Easily view your SGPA, percentage, class rank, and more without any hassle.">
+  <meta property="og:image" content="/images/home.png"> <!-- Use your uploaded OG image -->
+  <meta property="og:url" content="https://resync.vtusync.in/"> <!-- Replace with your actual domain -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ResultSync">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ResultSync - Quick and Easy VTU Results">
+  <meta name="twitter:description" content="ResultSync: Fetch your VTU results instantly! Easily view your SGPA, percentage, class rank, and more without any hassle.">
+  <meta name="twitter:image" content="/images/home.png"> <!-- Use your uploaded OG image -->
+  <title>ResultSync</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/4926/4926610.png" type="image/png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header class="glass-header">
+    <div class="header-content">
+      <div class="logo-group">
+        <div class="logo-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h1>ResultSync</h1>
+        <div class="tagline-badge">BETA</div>
+      </div>
+      
+      <nav class="desktop-nav">
+        <a href="/" class="nav-link active">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="https://results.vtu.ac.in" class="nav-link">
+          <i class="fas fa-poll"></i>
+          <span>Official Results</span>
+        </a>
+        <a href="/ranking/" class="nav-link">
+          <i class="fas fa-trophy"></i>
+          <span>Rankings</span>
+        </a>
+        <a href="/compare/" class="nav-link compare-link">
+          <i class="fas fa-users"></i>
+          <span>Compare</span>
+        </a>
+        <!-- New Feedback Link -->
+        <a href="/legal/feedback.html" class="nav-link">
+          <i class="fas fa-comment-alt"></i>
+          <span>Feedback</span>
+        </a>
+        <!-- New Legal Link -->
+        <a href="/legal/" class="nav-link">
+          <i class="fas fa-balance-scale"></i>
+          <span>Legal</span>
+        </a>
+      </nav>
+      
+      <button class="mobile-menu-btn" aria-label="Menu">
+        <div class="hamburger"></div>
+      </button>
+    </div>
+  
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+      <div class="mobile-nav-header">
+        <div class="logo-group">
+          <div class="logo-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h1>ResultSync</h1>
+        </div>
+
+      </div>
+      <div class="mobile-nav-links">
+        <a href="/" class="mobile-nav-link active">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="https://results.vtu.ac.in" class="mobile-nav-link">
+          <i class="fas fa-poll"></i>
+          <span>Official Results</span>
+        </a>
+        <a href="/ranking/" class="mobile-nav-link">
+          <i class="fas fa-trophy"></i>
+          <span>Rankings</span>
+        </a>
+        <a href="/compare/" class="mobile-nav-link icompare-link">
+          <i class="fas fa-users"></i>
+          <span>Compare</span>
+        </a>
+        <!-- Mobile Feedback Link -->
+        <a href="/legal/feedback/" class="mobile-nav-link">
+          <i class="fas fa-comment-alt"></i>
+          <span>Feedback</span>
+        </a>
+        <!-- Mobile Legal Link -->
+        <a href="/legal/" class="mobile-nav-link">
+          <i class="fas fa-balance-scale"></i>
+          <span>Legal</span>
+        </a>
+      </div>
+      
+      <!-- Mobile Footer Links -->
+      <div class="mobile-nav-footer">
+        <a href="#" class="mobile-footer-link">
+          <i class="fas fa-shield-alt"></i>
+          <span>Version 1.0.0</span>
+        </a>
+
+      </div>
+    </div>
+  </header>
+
+    <!-- Form Card -->
+    <div class="form-card">
+      <div class="form-header">
+        <h1>ResultSync</h1>
+        <p>See how you did in VTU – Quick and easy!</p>
+      </div>
+      <div class="form-content">
+        <form id="resultForm">
+          <div class="form-group">
+            <label for="usn">Enter USN</label>
+            <input type="text" id="usn" placeholder="1RV20CS123" required>
+          </div>
+          <div class="form-group">
+            <label for="captcha">Enter Captcha</label>
+            <div class="captcha-container">
+              <img id="captchaImg" src="/api/captcha" alt="Captcha">
+              <button type="button" id="refreshCaptcha" class="captcha-refresh">
+                <i class="fa-solid fa-sync"></i>
+                </button>
+            </div>
+            <input type="text" id="captcha" placeholder="Enter Captcha" required>
+          </div>
+
+ <!-- Loader (Centered above button) -->
+<div class="loader-wrapper" id="loaderWrapper">
+  <div class="loader"></div>
+</div>
+
+          <button type="submit" class="pill-button primary-btn get-result-btn">
+            <i class="fa-solid fa-square-poll-vertical"></i>
+            Get Result
+          </button>
+          
+        </form>
+      </div>
+    </div>
+      <button class="pill-button download-btn" id="downloadBtn" style="display: none;">
+        <i class="fas fa-download"></i>
+        Download PDF
+      </button>
+
+
+<!-- 1️⃣ Student Details block (unchanged) -->
+<div id="studentInfo" class="card student-card" style="display:none;">
+  <div class="card-header">
+    <h2><i class="fas fa-user-graduate"></i> Student Details</h2>
+  </div>
+  <div class="student-info">
+    <div class="info-item">
+      <label>Name</label>
+      <div id="studentName"></div>
+    </div>
+    <div class="info-item">
+      <label>USN</label>
+      <div id="universitySeatNumber"></div>
+    </div>
+    <div class="info-item">
+      <label>Semester</label>
+      <div id="studentSemester"></div>
+    </div>
+    <div class="info-item">
+      <label>Branch</label>
+      <div id="studentBranch"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2️⃣ Performance Stats block (moved out) -->
+<div class="performance-stats" style="display:none;" id="perfStats">
+  <div class="stat-item highlight">
+    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+    <div class="stat-content">
+      <label>SGPA</label>
+      <div id="studentSGPA">–</div>
+    </div>
+  </div>
+  <div class="stat-item highlight">
+    <div class="stat-icon"><i class="fas fa-percent"></i></div>
+    <div class="stat-content">
+      <label>Percentage</label>
+      <div id="studentPercentage">–</div>
+    </div>
+  </div>
+  <div class="stat-item highlight">
+    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+    <div class="stat-content">
+      <label>Class Rank</label>
+      <div id="studentRank">–</div>
+    </div>
+  </div>
+  <div class="stat-item highlight">
+    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+    <div class="stat-content">
+      <label>Status</label>
+      <div id="studentStatus">–</div>
+    </div>
+  </div>
+</div>
+
+    <!-- Results Table -->
+    <div class="card results-card" id="resultTable" style="display:none;">
+      <div class="card-header">
+        <h2><i class="fas fa-clipboard-list"></i> Subject Results</h2>
+      </div>
+      <div class="table-wrapper">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Subject Code</th>
+              <th>Subject Name</th>
+              <th>Internal Marks</th>
+              <th>External Marks</th>
+              <th>Total Marks</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data inserted dynamically -->
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+
+    
+
+
+    <!-- Footer -->
+    <div class="footer-card">
+      <p>Not affiliated with VTU. For educational purposes only.</p>
+      <p>Proudly built with <i class="fas fa-heart"></i> by <strong>Rahul</strong> | Powered by <a href="https://vtusync.in" target="_blank" rel="noopener noreferrer">VTUSync.in</a></p>
+      <p>Version 1.0.0</p>
+    </div>
+    
+    
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
