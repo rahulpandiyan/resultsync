@@ -1,16 +1,24 @@
+// backend/firebase.js
 import admin from 'firebase-admin';
 import { readFileSync, existsSync } from 'fs';
 
-const path = existsSync('/etc/secrets/serviceAccountKey.json')
+// Determine path: Render secret or local file
+const keyPath = existsSync('/etc/secrets/serviceAccountKey.json')
   ? '/etc/secrets/serviceAccountKey.json'
   : new URL('./serviceAccountKey.json', import.meta.url).pathname;
 
-const serviceAccount = JSON.parse(readFileSync(path, 'utf8'));
+// Read and parse the service account JSON
+const serviceAccount = JSON.parse(readFileSync(keyPath, 'utf8'));
 
+// Initialize the Admin SDK only once
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
 }
 
-export default admin;
+// Get Firestore instance
+const db = admin.firestore();
+
+// Export both admin and db
+export { admin, db };
