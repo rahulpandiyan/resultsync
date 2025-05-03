@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       shareBtn.style.display = 'inline-block';
       shareBtn.onclick = () => {
-        const msg = `I got ${viewMode === 'class' ? 'Class' : 'University'} Rank #${studentRow.rank} (Total: ${studentRow.totalMarks} marks) in VTU Results! See where you stand with ResultSync https://vtusync.in`;
+        const msg = `I got ${viewMode === 'class' ? 'Class' : 'University'} Rank #${studentRow.rank} (Total: ${studentRow.totalMarks} marks) in VTU Results! See where you stand with ResultSync https://beta.vtusync.in`;
         const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
         window.open(url, '_blank');
       };

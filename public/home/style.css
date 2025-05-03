@@ -388,11 +388,7 @@
   /* ===== RESULTS TABLE ===== */
   .table-wrapper {
     overflow-x: auto;
-    /* Lets table scroll horizontally */
-    touch-action: pan-x;
-    /* Allows horizontal touch-scroll + zoom */
-    -webkit-overflow-scrolling: touch;
-    /* Smooth scrolling on iOS */
+    padding: 20px 25px;
   }
 
   .results-table {
