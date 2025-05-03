@@ -61,3 +61,40 @@ document.addEventListener('DOMContentLoaded', function() {
     setViewportHeight();
     window.addEventListener('resize', setViewportHeight);
   });
+
+// Add this JavaScript to your site
+// Add this JavaScript to your site
+document.addEventListener('DOMContentLoaded', function() {
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  const closeBtn = document.querySelector('.mobile-close-btn');
+  const navOverlay = document.querySelector('.mobile-nav-overlay');
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+  
+  // Toggle menu when hamburger is clicked
+  menuBtn.addEventListener('click', function() {
+    document.body.classList.toggle('menu-open');
+  });
+  
+  // Close menu when X button is clicked
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      document.body.classList.remove('menu-open');
+    });
+  }
+  
+  // Close menu when overlay is clicked
+  if (navOverlay) {
+    navOverlay.addEventListener('click', function() {
+      document.body.classList.remove('menu-open');
+    });
+  }
+  
+  // Close menu when a link is clicked
+  mobileNavLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.body.classList.remove('menu-open');
+    });
+  });
+});
+
+
