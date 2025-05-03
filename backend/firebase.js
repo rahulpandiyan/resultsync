@@ -1,17 +1,16 @@
 import admin from 'firebase-admin';
-import fs from 'fs';
+import { readFileSync, existsSync } from 'fs';
 
-// Load service account JSON manually
-const serviceAccount = JSON.parse(
-  readFileSync('/etc/secrets/serviceAccountKey.json', 'utf8')
-);
+const path = existsSync('/etc/secrets/serviceAccountKey.json')
+  ? '/etc/secrets/serviceAccountKey.json'
+  : new URL('./serviceAccountKey.json', import.meta.url).pathname;
+
+const serviceAccount = JSON.parse(readFileSync(path, 'utf8'));
 
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount),
   });
 }
 
-const db = admin.firestore();
-
-export { db };
+export default admin;
