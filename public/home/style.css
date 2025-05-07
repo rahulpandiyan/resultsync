@@ -991,3 +991,12 @@
     margin: 0;
     padding: 0;
   }
+
+  .cooldown-message {
+    display: none;
+    font-size: 0.9rem;
+    color: #e74c3c;
+    margin-top: 10px;
+    text-align: center;
+  }
+  

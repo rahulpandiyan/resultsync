@@ -4,7 +4,7 @@ import { wrapper } from 'axios-cookiejar-support';
 import { CookieJar } from 'tough-cookie';
 import * as cheerio from 'cheerio';
 import { calculateSGPA } from './utils/sgpaCalculator.js';
-import { updateRankings } from './utils/updateRankings.js';
+import { updateRankings } from './utils/updateRankings.js'; // 📌 New import for updating class rank
 
 const BASE_URL = 'https://results.vtu.ac.in/DJcbcs25/resultpage.php';
 const CAPTCHA_URL = 'https://results.vtu.ac.in/captcha/vtu_captcha.php';
@@ -75,6 +75,7 @@ export async function fetchVTUResult(usn, captcha) {
         external: parseInt($(cells[3]).text().trim()) || 0,
         total: parseInt($(cells[4]).text().trim()) || 0,
         result: $(cells[5]).text().trim(),
+        announced: $(cells[6]).text().trim(),
       });
     });
 
@@ -102,12 +103,9 @@ export async function fetchVTUResult(usn, captcha) {
       return { error: rankInfo.error };
     }
 
-// Determine if any subject has a “FAIL” status
-const isPass = !subjects.some(sub => /FAIL|F\b/i.test(sub.result));
-// /FAIL|F\b/i matches “FAIL” or just “F” at word-boundary
-
-// Include a normalized status
-const status = isPass ? 'PASS' : 'FAIL';
+    // ⏩ NEW: Determine PASS/FAIL
+const hasFailed = subjects.some(subject => subject.result.toUpperCase() === 'F');
+const status = hasFailed ? 'FAIL' : 'PASS';
 
     // Return result data with ranks
     return {
@@ -131,35 +129,5 @@ const status = isPass ? 'PASS' : 'FAIL';
     return {
       error: err.message.includes('Token') ? 'Session expired. Please fetch CAPTCHA again.' : 'Something went wrong. Check USN/CAPTCHA and try again.'
     };
-  }
-}
-
-// 🥉 Compare results between multiple USNs
-export async function compareResults(usns, captcha) {
-  const comparisonResults = [];
-
-  try {
-    // Fetch results for all USNs
-    for (let usn of usns) {
-      const result = await fetchVTUResult(usn.toUpperCase(), captcha);
-      if (result.error) {
-        return { error: `Error fetching result for ${usn}: ${result.error}` };
-      }
-      comparisonResults.push(result);
-    }
-
-    // Sort results by total marks in descending order
-    comparisonResults.sort((a, b) => b.totalMarks - a.totalMarks);
-
-    // Add rank to each result
-    comparisonResults.forEach((result, index) => {
-      result.rank = index + 1;
-    });
-
-    return comparisonResults;
-
-  } catch (error) {
-    console.error('Error comparing results:', error);
-    return { error: 'Failed to compare results' };
   }
 }

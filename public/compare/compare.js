@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Add friend USN input field
   document.getElementById('addFriendBtn').addEventListener('click', () => {
     const container = document.getElementById('friendsUsnsContainer');
@@ -122,6 +122,9 @@ document.addEventListener('DOMContentLoaded', function() {
         subjectsCell.appendChild(subjectsGrid);
         
         tbody.appendChild(row);
+
+        // Add comparison indicators
+        addComparisonIndicators(subjectsGrid, index, data.results);
       });
 
       table.style.display = 'table';
@@ -134,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Share button functionality
-  document.getElementById('shareBtn').addEventListener('click', function() {
+  document.getElementById('shareBtn').addEventListener('click', function () {
     if (navigator.share) {
       navigator.share({
         title: 'VTU Results Comparison',
@@ -147,38 +150,95 @@ document.addEventListener('DOMContentLoaded', function() {
       alert('Web Share API not supported in your browser');
     }
   });
-});
 
-// Add this JavaScript to your site
-document.addEventListener('DOMContentLoaded', function() {
+  // Mobile menu functionality
   const menuBtn = document.querySelector('.mobile-menu-btn');
   const closeBtn = document.querySelector('.mobile-close-btn');
   const navOverlay = document.querySelector('.mobile-nav-overlay');
   const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
   
   // Toggle menu when hamburger is clicked
-  menuBtn.addEventListener('click', function() {
+  menuBtn.addEventListener('click', function () {
     document.body.classList.toggle('menu-open');
   });
   
   // Close menu when X button is clicked
   if (closeBtn) {
-    closeBtn.addEventListener('click', function() {
+    closeBtn.addEventListener('click', function () {
       document.body.classList.remove('menu-open');
     });
   }
   
   // Close menu when overlay is clicked
   if (navOverlay) {
-    navOverlay.addEventListener('click', function() {
+    navOverlay.addEventListener('click', function () {
       document.body.classList.remove('menu-open');
     });
   }
   
   // Close menu when a link is clicked
-  mobileNavLinks.forEach(function(link) {
-    link.addEventListener('click', function() {
+  mobileNavLinks.forEach(function (link) {
+    link.addEventListener('click', function () {
       document.body.classList.remove('menu-open');
     });
   });
 });
+
+// Comparison indicators
+function addComparisonIndicators(subjectsGrid, studentIndex, allResults) {
+  const subjectCards = subjectsGrid.querySelectorAll('.subject-card');
+  
+  subjectCards.forEach(card => {
+    const subjectCode = card.querySelector('.subject-name').textContent;
+    const subjectMarks = parseInt(card.querySelector('.subject-marks').textContent);
+    
+    // Compare with all other students
+    let isHighest = true;
+    let isLowest = true;
+    let comparisonCount = 0;
+    let higherCount = 0;
+    
+    allResults.forEach((result, idx) => {
+      if (idx !== studentIndex) {
+        const otherSubjects = result.subjects.filter(sub => !(sub.code.includes('PASS') || sub.title.includes('FAIL')));
+        const otherSubject = otherSubjects.find(sub => sub.code === subjectCode);
+        
+        if (otherSubject) {
+          comparisonCount++;
+          const otherMarks = parseInt(otherSubject.total) || 0;
+          
+          if (subjectMarks >= otherMarks) {
+            higherCount++;
+          } else {
+            isHighest = false;
+          }
+          
+          if (subjectMarks <= otherMarks) {
+            isLowest = false;
+          }
+        }
+      }
+    });
+    
+    // Add indicator based on comparison
+    const indicator = document.createElement('div');
+    indicator.className = 'comparison-indicator';
+    
+    if (comparisonCount > 0) {
+      if (isHighest) {
+        indicator.classList.add('highest');
+      } else if (isLowest) {
+        indicator.classList.add('lowest');
+      } else if (higherCount === comparisonCount) {
+        indicator.classList.add('higher');
+      } else if (higherCount === 0) {
+        indicator.classList.add('lower');
+      } else {
+        // For middle scores, you could add a neutral indicator or skip
+        return; // Skip adding indicator for middle scores
+      }
+      
+      card.appendChild(indicator);
+    }
+  });
+}

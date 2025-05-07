@@ -109,14 +109,7 @@
         </a>
       </div>
       
-      <!-- Mobile Footer Links -->
-      <div class="mobile-nav-footer">
-        <a href="#" class="mobile-footer-link">
-          <i class="fas fa-shield-alt"></i>
-          <span>Version 1.0.0</span>
-        </a>
 
-      </div>
     </div>
   </header>
       
@@ -129,7 +122,7 @@
 
         <div class="info-note">
             <p>📌 Only results which are saved will be available for class rank and university rank or to view later.</p>
-            <p>Haven't checked your results yet? <a href="#" id="checkResultLink">Click here to check!</a></p>
+            <p>Haven't checked your results yet? <a href="/" id="checkResultLink">Click here to check!</a></p>
         </div>
 
 
@@ -143,7 +136,10 @@
             <button id="univBtn">University Rank</button>
         </div>
 
-
+        <!-- University Rank Note (hidden by default) -->
+        <div id="univRankNote" style="display: none; margin: 1rem 0; padding: 1rem; background-color: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+            <p><strong>Note:</strong> Only top 100 university performers are displayed here. If your rank isn't shown, don't worry - we can still calculate your position when you enter your USN!</p>
+        </div>
 
         <div id="loader" style="display:none;">Loading rankings...</div>
 
@@ -177,10 +173,21 @@
   <p>Not affiliated with VTU. For educational purposes only.</p>
   <p>Proudly built with <i class="fas fa-heart"></i> by <strong>Rahul</strong></p>
   <p>Powered by <a href="https://vtusync.in" target="_blank" rel="noopener noreferrer">VTUSync.in</a></p>
-  <p>Version 1.0.0</p>
+  <p>Version 1.1.0</p>
 </div>
 
 <script src="rank.js"></script>
+
+<script>
+  // Add event listeners for the toggle buttons
+  document.getElementById('univBtn').addEventListener('click', function() {
+    document.getElementById('univRankNote').style.display = 'block';
+  });
+  
+  document.getElementById('classBtn').addEventListener('click', function() {
+    document.getElementById('univRankNote').style.display = 'none';
+  });
+</script>
 
 </body>
 </html>

@@ -866,7 +866,7 @@ const subjectsByBranch = {
       const codeNorm = s.code.trim().toUpperCase().replace(/[^A-Z0-9\/]/g, "");
   
       // List of non-subject codes to ignore
-      const ignoredCodes = ["PPASS", "FAIL", "FCD", "FIRSTCLASS", "SECONDCLASS", "WITHHELD", "PASS", "AB", "NA",];
+      const ignoredCodes = ["PPASS", "FAIL", "FCD", "FIRSTCLASS", "SECONDCLASS", "WITHHELD", "PASS", "AB", "SUBJECTCODE", "NA"];
   
       if (ignoredCodes.includes(codeNorm)) return null;
   
