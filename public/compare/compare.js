@@ -25,10 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     container.appendChild(friendGroup);
   });
 
-  // Refresh captcha
-  document.getElementById('refreshCaptcha').addEventListener('click', () => {
-    document.getElementById('captchaImg').src = `/api/captcha?t=${Date.now()}`;
-  });
+
 
   // Form submission
   document.getElementById('comparisonForm').addEventListener('submit', async (e) => {
@@ -242,3 +239,147 @@ function addComparisonIndicators(subjectsGrid, studentIndex, allResults) {
     }
   });
 }
+
+
+//Add this JavaScript to your site
+document.addEventListener('DOMContentLoaded', function() {
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  const closeBtn = document.querySelector('.mobile-close-btn');
+  const navOverlay = document.querySelector('.mobile-nav-overlay');
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+  
+  // Toggle menu when hamburger is clicked
+  menuBtn.addEventListener('click', function() {
+    document.body.classList.toggle('menu-open');
+  });
+  
+  // Close menu when X button is clicked
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      document.body.classList.remove('menu-open');
+    });
+  }
+  
+  // Close menu when overlay is clicked
+  if (navOverlay) {
+    navOverlay.addEventListener('click', function() {
+      document.body.classList.remove('menu-open');
+    });
+  }
+  
+  // Close menu when a link is clicked
+  mobileNavLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      document.body.classList.remove('menu-open');
+    });
+  });
+});
+
+// === CONFIG ===
+const COOLDOWN_SECONDS = 30;
+const COOLDOWN_KEY = 'compareCooldownTimestamp';
+
+// === ELEMENTS ===
+const comparisonForm = document.getElementById('comparisonForm');
+const submitBtn = comparisonForm.querySelector('button[type="submit"]');
+const cooldownTimerEl = document.getElementById('cooldownTimer');
+const trafficMessage = document.getElementById('trafficMessage');
+const captchaImg = document.getElementById('captchaImg');
+const captchaInput = document.getElementById('captcha');
+const refreshCaptchaBtn = document.getElementById('refreshCaptcha');
+
+let countdownInterval;
+
+// === UTILS ===
+function getRemainingCooldown() {
+  const savedTimestamp = localStorage.getItem(COOLDOWN_KEY);
+  if (!savedTimestamp) return 0;
+  const expiresAt = parseInt(savedTimestamp, 10);
+  const remaining = Math.floor((expiresAt - Date.now()) / 1000);
+  return remaining > 0 ? remaining : 0;
+}
+
+function startCooldown() {
+  const expiresAt = Date.now() + COOLDOWN_SECONDS * 1000;
+  localStorage.setItem(COOLDOWN_KEY, expiresAt);
+  updateCooldownDisplay();
+  startCountdown();
+}
+
+function refreshCaptcha() {
+  // Add random parameter to prevent caching
+  const randomParam = Math.random().toString(36).substring(7);
+  captchaImg.src = `/api/captcha?t=${randomParam}`;
+  captchaInput.value = ''; // Clear the input field
+}
+
+function updateCooldownDisplay() {
+  const remaining = getRemainingCooldown();
+  
+  if (remaining > 0) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="fas fa-clock"></i> Please Wait`;
+    cooldownTimerEl.textContent = remaining;
+    trafficMessage.style.display = 'flex';
+  } else {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = `<i class="fas fa-chart-bar"></i> Compare Results`;
+    trafficMessage.style.display = 'none';
+    refreshCaptcha(); // Refresh captcha when cooldown ends
+  }
+}
+
+function startCountdown() {
+  // Clear existing interval
+  if (countdownInterval) clearInterval(countdownInterval);
+  
+  // Update immediately
+  updateCooldownDisplay();
+  
+  // Start new countdown
+  countdownInterval = setInterval(() => {
+    const remaining = getRemainingCooldown();
+    cooldownTimerEl.textContent = remaining;
+    
+    if (remaining <= 0) {
+      clearInterval(countdownInterval);
+      updateCooldownDisplay();
+    }
+  }, 1000);
+}
+
+// === FORM HANDLING ===
+comparisonForm.addEventListener('submit', function(e) {
+  const remaining = getRemainingCooldown();
+  
+  if (remaining > 0) {
+    e.preventDefault();
+    trafficMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    // Start cooldown only if form is valid
+    if (comparisonForm.checkValidity()) {
+      startCooldown();
+    }
+  }
+});
+
+// Manual captcha refresh
+refreshCaptchaBtn.addEventListener('click', refreshCaptcha);
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Load captcha immediately
+  refreshCaptcha();
+  
+  // Check for cooldown
+  if (getRemainingCooldown() > 0) {
+    startCountdown();
+  }
+});
+
+// Ensure captcha loads even if DOMContentLoaded fires too early
+window.addEventListener('load', function() {
+  if (captchaImg.complete && captchaImg.naturalHeight === 0) {
+    refreshCaptcha();
+  }
+});

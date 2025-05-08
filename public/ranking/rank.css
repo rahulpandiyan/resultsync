@@ -778,3 +778,45 @@ body.menu-open .mobile-nav {
   margin: 0;
   padding: 0;
 }
+
+.mobile-nav-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 0;
+  background-color: #ffffff; /* Pure white or match your theme */
+  border-top: 1px solid rgba(0, 0, 0, 0.08); /* Subtle divider */
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.03); /* Soft floating effect */
+  position: relative;
+  z-index: 100;
+}
+
+.mobile-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #333333; /* Dark text for contrast */
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: #f8f9fa; /* Light gray background */
+  transition: all 0.25s cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+.mobile-footer-link:hover {
+  background-color: #e9ecef; /* Slightly darker on hover */
+  transform: translateY(-1px);
+}
+
+.mobile-footer-link i {
+  font-size: 14px;
+  color: #2a7ae9; /* Modern blue accent */
+}
+
+/* Optional: Micro-interaction for a polished feel */
+.mobile-footer-link:active {
+  transform: scale(0.98);
+}

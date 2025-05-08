@@ -54,11 +54,7 @@
           <i class="fas fa-users"></i>
           <span>Compare</span>
         </a>
-        <!-- New Feedback Link -->
-        <a href="/legal/feedback.html" class="nav-link">
-          <i class="fas fa-comment-alt"></i>
-          <span>Feedback</span>
-        </a>
+
         <!-- New Legal Link -->
         <a href="/legal/" class="nav-link">
           <i class="fas fa-balance-scale"></i>
@@ -99,11 +95,7 @@
           <i class="fas fa-users"></i>
           <span>Compare</span>
         </a>
-        <!-- Mobile Feedback Link -->
-        <a href="/legal/feedback.html/" class="mobile-nav-link">
-          <i class="fas fa-comment-alt"></i>
-          <span>Feedback</span>
-        </a>
+
         <!-- Mobile Legal Link -->
         <a href="/legal/" class="mobile-nav-link">
           <i class="fas fa-balance-scale"></i>
@@ -113,9 +105,9 @@
       
       <!-- Mobile Footer Links -->
       <div class="mobile-nav-footer">
-        <a href="#" class="mobile-footer-link">
+        <a href="https://vtusync.in" class="mobile-footer-link">
           <i class="fas fa-shield-alt"></i>
-          <span>Version 1.0.0</span>
+          <span>Powered By VTUSync</span>
         </a>
 
       </div>
@@ -138,8 +130,6 @@
             <label for="captcha">Enter Captcha</label>
             <div class="captcha-container">
               <img id="captchaImg" src="/api/captcha" alt="Captcha">
-              <button type="button" id="refreshCaptcha" class="captcha-refresh">
-                <i class="fa-solid fa-sync"></i>
                 </button>
             </div>
             <input type="text" id="captcha" placeholder="Enter Captcha" required>
@@ -154,6 +144,19 @@
             <i class="fa-solid fa-square-poll-vertical"></i>
             Get Result
           </button>
+          <!-- Add this right after your submit button -->
+<div class="traffic-message" id="trafficMessage" style="display: none;">
+  <div class="traffic-icon">
+    <i class="fas fa-traffic-light"></i>
+  </div>
+  <div class="traffic-content">
+    <p>Hold on! You’ve already submitted. Please wait for your turn !</p>
+    <div class="cooldown-timer">
+      <i class="fas fa-clock"></i>
+      <span>You can try again in <strong id="cooldownTimer">60</strong> seconds</span>
+    </div>
+  </div>
+</div>
           
         </form>
       </div>
@@ -259,7 +262,7 @@
     
 
   </div>
-
+    
   <script src="script.js"></script>
 </body>
 </html>

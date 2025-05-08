@@ -992,11 +992,95 @@
     padding: 0;
   }
 
-  .cooldown-message {
-    display: none;
-    font-size: 0.9rem;
-    color: #e74c3c;
-    margin-top: 10px;
-    text-align: center;
-  }
-  
+  .mobile-nav-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 0;
+    background-color: #ffffff; /* Pure white or match your theme */
+    border-top: 1px solid rgba(0, 0, 0, 0.08); /* Subtle divider */
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.03); /* Soft floating effect */
+    position: relative;
+    z-index: 100;
+}
+
+.mobile-footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #333333; /* Dark text for contrast */
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: #f8f9fa; /* Light gray background */
+    transition: all 0.25s cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+.mobile-footer-link:hover {
+    background-color: #e9ecef; /* Slightly darker on hover */
+    transform: translateY(-1px);
+}
+
+.mobile-footer-link i {
+    font-size: 14px;
+    color: #2a7ae9; /* Modern blue accent */
+}
+
+/* Optional: Micro-interaction for a polished feel */
+.mobile-footer-link:active {
+    transform: scale(0.98);
+}
+
+/* Traffic Message Styles */
+.traffic-message {
+  background-color: #fff3e0;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 20px 0;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  border-left: 4px solid #ffa000;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.traffic-icon i {
+  color: #ff6d00;
+  font-size: 22px;
+  margin-top: 3px;
+}
+
+.traffic-content {
+  flex: 1;
+}
+
+.traffic-content p {
+  margin: 0 0 10px 0;
+  color: #5d4037;
+  line-height: 1.4;
+}
+
+.cooldown-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #d84315;
+}
+
+.cooldown-timer i {
+  font-size: 16px;
+}
+
+.cooldown-timer strong {
+  color: #bf360c;
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

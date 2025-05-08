@@ -99,6 +99,25 @@ body {
   display: none;
 }
 
+.compare-link {
+  position: relative;
+}
+
+.compare-link::after {
+  content: 'NEW';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--accent);
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.3);
+}
+
+
 .mobile-menu-btn {
   background: none;
   border: none;
@@ -719,4 +738,64 @@ textarea.form-control {
   background: var(--primary-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3), 0 2px 4px -1px rgba(99, 102, 241, 0.1);
+}
+
+.icompare-link {
+  position: relative;
+}
+
+.icompare-link::after {
+  content: 'NEW';
+  position: relative;
+  top: -6px;
+  right: -6px;
+  background: var(--accent);
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.3);
+}
+
+.mobile-nav-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 0;
+  background-color: #ffffff; /* Pure white or match your theme */
+  border-top: 1px solid rgba(0, 0, 0, 0.08); /* Subtle divider */
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.03); /* Soft floating effect */
+  position: relative;
+  z-index: 100;
+}
+
+.mobile-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #333333; /* Dark text for contrast */
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: #f8f9fa; /* Light gray background */
+  transition: all 0.25s cubic-bezier(0.37, 0, 0.63, 1);
+}
+
+.mobile-footer-link:hover {
+  background-color: #e9ecef; /* Slightly darker on hover */
+  transform: translateY(-1px);
+}
+
+.mobile-footer-link i {
+  font-size: 14px;
+  color: #2a7ae9; /* Modern blue accent */
+}
+
+/* Optional: Micro-interaction for a polished feel */
+.mobile-footer-link:active {
+  transform: scale(0.98);
 }

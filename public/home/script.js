@@ -184,3 +184,93 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// === CONFIG ===
+const COOLDOWN_SECONDS = 30;
+const COOLDOWN_KEY = 'resultCooldownTimestamp';
+
+// === ELEMENTS ===
+const getResultBtn = document.querySelector('.get-result-btn');
+const cooldownTimerEl = document.getElementById('cooldownTimer');
+const trafficMessage = document.getElementById('trafficMessage');
+const form = document.getElementById('resultForm');
+const captchaImg = document.getElementById('captchaImg');
+const refreshCaptchaBtn = document.getElementById('refreshCaptcha');
+
+// === UTILS ===
+function getRemainingCooldown() {
+  const savedTimestamp = localStorage.getItem(COOLDOWN_KEY);
+  if (!savedTimestamp) return 0;
+  const expiresAt = parseInt(savedTimestamp, 10);
+  const remaining = Math.floor((expiresAt - Date.now()) / 1000);
+  return remaining > 0 ? remaining : 0;
+}
+
+function startCooldown() {
+  const expiresAt = Date.now() + COOLDOWN_SECONDS * 1000;
+  localStorage.setItem(COOLDOWN_KEY, expiresAt);
+  updateButtonState();
+}
+
+function refreshCaptcha() {
+  // Add timestamp to URL to prevent caching
+  captchaImg.src = `/api/captcha?t=${Date.now()}`;
+  // Clear the captcha input field
+  document.getElementById('captcha').value = '';
+}
+
+function updateButtonState() {
+  const remaining = getRemainingCooldown();
+  
+  if (remaining > 0) {
+    getResultBtn.disabled = true;
+    getResultBtn.innerHTML = `<i class="fa-solid fa-clock"></i> Please Wait`;
+    cooldownTimerEl.textContent = remaining;
+    trafficMessage.style.display = 'flex';
+  } else {
+    getResultBtn.disabled = false;
+    getResultBtn.innerHTML = `<i class="fa-solid fa-square-poll-vertical"></i> Get Result`;
+    trafficMessage.style.display = 'none';
+    // Refresh captcha when cooldown ends
+    refreshCaptcha();
+  }
+}
+
+// === INIT TIMER ===
+function initCooldownTimer() {
+  updateButtonState();
+  const timerInterval = setInterval(() => {
+    const remaining = getRemainingCooldown();
+    cooldownTimerEl.textContent = remaining;
+    
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      updateButtonState();
+    }
+  }, 1000);
+}
+
+// === FORM SUBMISSION ===
+if (form) {
+  form.addEventListener('submit', function(e) {
+    const remaining = getRemainingCooldown();
+    
+    if (remaining > 0) {
+      e.preventDefault();
+    } else {
+      trafficMessage.style.display = 'flex';
+      cooldownTimerEl.textContent = COOLDOWN_SECONDS;
+      setTimeout(() => {
+        trafficMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+      startCooldown();
+    }
+  });
+}
+
+// Add click handler for manual captcha refresh
+if (refreshCaptchaBtn) {
+  refreshCaptchaBtn.addEventListener('click', refreshCaptcha);
+}
+
+// Start timer when page loads
+initCooldownTimer();

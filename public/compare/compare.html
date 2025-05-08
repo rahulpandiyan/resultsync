@@ -99,17 +99,21 @@
           <i class="fas fa-users"></i>
           <span>Compare</span>
         </a>
-        <!-- Mobile Feedback Link -->
-        <a href="/legal/feedback/" class="mobile-nav-link">
-          <i class="fas fa-comment-alt"></i>
-          <span>Feedback</span>
-        </a>
         <!-- Mobile Legal Link -->
         <a href="/legal/" class="mobile-nav-link">
           <i class="fas fa-balance-scale"></i>
           <span>Legal</span>
         </a>
       </div>
+      
+            <!-- Mobile Footer Links -->
+            <div class="mobile-nav-footer">
+              <a href="https://vtusync.in" class="mobile-footer-link">
+                <i class="fas fa-shield-alt"></i>
+                <span>Powered By VTUSync</span>
+              </a>
+      
+            </div>
       
     </div>
   </header>
@@ -134,8 +138,6 @@
         <label for="captcha">Captcha</label>
         <div class="captcha-container">
           <img id="captchaImg" src="/api/captcha" alt="Captcha Image" class="captcha-image" />
-          <button type="button" id="refreshCaptcha" class="captcha-refresh">
-            <i class="fas fa-sync-alt"></i>
           </button>
         </div>
         <input type="text" id="captcha" placeholder="Enter the captcha" required class="captcha-input" />
@@ -145,6 +147,21 @@
     <button type="submit">
       <i class="fas fa-chart-bar"></i> Compare Results
     </button>
+    <!-- Add this inside your form, after the submit button -->
+<div class="traffic-message" id="trafficMessage" style="display: none;">
+  <div class="traffic-icon">
+    <i class="fas fa-traffic-light"></i>
+  </div>
+  <div class="traffic-content">
+    <p>Hold on! You've already submitted. Please wait for your turn!</p>
+    <div class="cooldown-timer">
+      <i class="fas fa-clock"></i>
+      <span>You can try again in <strong id="cooldownTimer">30</strong> seconds</span>
+    </div>
+  </div>
+</div>
+    
+    
   </form>
 
   <div id="loader">
