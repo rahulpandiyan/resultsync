@@ -25,7 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
     container.appendChild(friendGroup);
   });
 
-
+  // Refresh captcha
+  document.getElementById('refreshCaptcha').addEventListener('click', () => {
+    document.getElementById('captchaImg').src = `/api/captcha?t=${Date.now()}`;
+  });
 
   // Form submission
   document.getElementById('comparisonForm').addEventListener('submit', async (e) => {
