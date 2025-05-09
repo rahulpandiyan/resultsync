@@ -292,6 +292,7 @@ const captchaInput = document.getElementById('captcha');
 const refreshCaptchaBtn = document.getElementById('refreshCaptcha');
 
 let countdownInterval;
+let hadActiveCooldown = false; // Track if cooldown was active
 
 // === UTILS ===
 function getRemainingCooldown() {
@@ -305,6 +306,7 @@ function getRemainingCooldown() {
 function startCooldown() {
   const expiresAt = Date.now() + COOLDOWN_SECONDS * 1000;
   localStorage.setItem(COOLDOWN_KEY, expiresAt);
+  hadActiveCooldown = true; // Mark cooldown activation
   updateCooldownDisplay();
   startCountdown();
 }
@@ -313,7 +315,7 @@ function refreshCaptcha() {
   // Add random parameter to prevent caching
   const randomParam = Math.random().toString(36).substring(7);
   captchaImg.src = `/api/captcha?t=${randomParam}`;
-  captchaInput.value = ''; // Clear the input field
+  captchaInput.value = '';
 }
 
 function updateCooldownDisplay() {
@@ -321,28 +323,31 @@ function updateCooldownDisplay() {
   
   if (remaining > 0) {
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `<i class="fas fa-clock"></i> Please Wait`;
+    submitBtn.innerHTML = `<i class="fas fa-clock"></i> Please Wait (${remaining}s)`;
     cooldownTimerEl.textContent = remaining;
     trafficMessage.style.display = 'flex';
   } else {
     submitBtn.disabled = false;
     submitBtn.innerHTML = `<i class="fas fa-chart-bar"></i> Compare Results`;
     trafficMessage.style.display = 'none';
-    refreshCaptcha(); // Refresh captcha when cooldown ends
+    
+    // Only refresh if we're coming out of cooldown
+    if (hadActiveCooldown) {
+      refreshCaptcha();
+      hadActiveCooldown = false;
+    }
   }
 }
 
 function startCountdown() {
-  // Clear existing interval
   if (countdownInterval) clearInterval(countdownInterval);
   
-  // Update immediately
   updateCooldownDisplay();
   
-  // Start new countdown
   countdownInterval = setInterval(() => {
     const remaining = getRemainingCooldown();
     cooldownTimerEl.textContent = remaining;
+    submitBtn.innerHTML = `<i class="fas fa-clock"></i> Please Wait (${remaining}s)`;
     
     if (remaining <= 0) {
       clearInterval(countdownInterval);
@@ -359,9 +364,10 @@ comparisonForm.addEventListener('submit', function(e) {
     e.preventDefault();
     trafficMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
   } else {
-    // Start cooldown only if form is valid
     if (comparisonForm.checkValidity()) {
       startCooldown();
+      trafficMessage.style.display = 'flex';
+      cooldownTimerEl.textContent = COOLDOWN_SECONDS;
     }
   }
 });
@@ -371,16 +377,18 @@ refreshCaptchaBtn.addEventListener('click', refreshCaptcha);
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-  // Load captcha immediately
-  refreshCaptcha();
+  // Set up error handling for initial load
+  captchaImg.addEventListener('error', refreshCaptcha);
   
-  // Check for cooldown
-  if (getRemainingCooldown() > 0) {
+  // Check existing cooldown state
+  hadActiveCooldown = getRemainingCooldown() > 0;
+  
+  if (hadActiveCooldown) {
     startCountdown();
   }
 });
 
-// Ensure captcha loads even if DOMContentLoaded fires too early
+// Fallback for failed initial load
 window.addEventListener('load', function() {
   if (captchaImg.complete && captchaImg.naturalHeight === 0) {
     refreshCaptcha();

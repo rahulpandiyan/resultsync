@@ -195,6 +195,10 @@ const trafficMessage = document.getElementById('trafficMessage');
 const form = document.getElementById('resultForm');
 const captchaImg = document.getElementById('captchaImg');
 const refreshCaptchaBtn = document.getElementById('refreshCaptcha');
+const captchaInput = document.getElementById('captcha');
+
+// Track if we've had a cooldown
+let hadActiveCooldown = false;
 
 // === UTILS ===
 function getRemainingCooldown() {
@@ -208,14 +212,15 @@ function getRemainingCooldown() {
 function startCooldown() {
   const expiresAt = Date.now() + COOLDOWN_SECONDS * 1000;
   localStorage.setItem(COOLDOWN_KEY, expiresAt);
+  hadActiveCooldown = true; // Mark that we've had a cooldown
   updateButtonState();
 }
 
 function refreshCaptcha() {
-  // Add timestamp to URL to prevent caching
-  captchaImg.src = `/api/captcha?t=${Date.now()}`;
-  // Clear the captcha input field
-  document.getElementById('captcha').value = '';
+  // Add random parameter to prevent caching
+  const randomString = Math.random().toString(36).substring(2, 8);
+  captchaImg.src = `/api/captcha?t=${randomString}`;
+  captchaInput.value = '';
 }
 
 function updateButtonState() {
@@ -223,24 +228,35 @@ function updateButtonState() {
   
   if (remaining > 0) {
     getResultBtn.disabled = true;
-    getResultBtn.innerHTML = `<i class="fa-solid fa-clock"></i> Please Wait`;
+    getResultBtn.innerHTML = `<i class="fa-solid fa-clock"></i> Please Wait (${remaining}s)`;
     cooldownTimerEl.textContent = remaining;
     trafficMessage.style.display = 'flex';
   } else {
     getResultBtn.disabled = false;
     getResultBtn.innerHTML = `<i class="fa-solid fa-square-poll-vertical"></i> Get Result`;
     trafficMessage.style.display = 'none';
-    // Refresh captcha when cooldown ends
-    refreshCaptcha();
+    
+    // Only refresh if we're coming out of a cooldown period
+    if (hadActiveCooldown) {
+      refreshCaptcha();
+      hadActiveCooldown = false;
+    }
   }
 }
 
 // === INIT TIMER ===
 function initCooldownTimer() {
+  // Set up error handling (only refresh if initial load fails)
+  captchaImg.addEventListener('error', refreshCaptcha);
+  
+  // Check if we're coming from a cooldown
+  hadActiveCooldown = getRemainingCooldown() > 0;
+  
   updateButtonState();
   const timerInterval = setInterval(() => {
     const remaining = getRemainingCooldown();
     cooldownTimerEl.textContent = remaining;
+    getResultBtn.innerHTML = `<i class="fa-solid fa-clock"></i> Please Wait (${remaining}s)`;
     
     if (remaining <= 0) {
       clearInterval(timerInterval);
@@ -256,21 +272,25 @@ if (form) {
     
     if (remaining > 0) {
       e.preventDefault();
+      trafficMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
-      trafficMessage.style.display = 'flex';
-      cooldownTimerEl.textContent = COOLDOWN_SECONDS;
-      setTimeout(() => {
-        trafficMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
-      startCooldown();
+      if (form.checkValidity()) {
+        // Start cooldown (which will trigger refresh when it ends)
+        startCooldown();
+        trafficMessage.style.display = 'flex';
+        cooldownTimerEl.textContent = COOLDOWN_SECONDS;
+        setTimeout(() => {
+          trafficMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
     }
   });
 }
 
-// Add click handler for manual captcha refresh
+// Manual refresh button
 if (refreshCaptchaBtn) {
   refreshCaptchaBtn.addEventListener('click', refreshCaptcha);
 }
 
-// Start timer when page loads
-initCooldownTimer();
+// Initialize - will show initial captcha without refreshing
+document.addEventListener('DOMContentLoaded', initCooldownTimer);
